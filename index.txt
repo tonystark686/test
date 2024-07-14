@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CC Checker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #animation-text {
+            font-size: 7em;
+            color: #ffffff;
+            opacity: 0;
+            animation: fadeInOut 3s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #2b2b2b;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea, input[type="text"], select {
+            width: 90%; /* Full width */
+            margin: 10px auto; /* Center horizontally */
+            padding: 10px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            display: block; /* Center horizontally */
+        }
+
+        textarea {
+            height: 200px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center align buttons */
+            margin: 20px 0; /* Add some margin for spacing */
+        }
+
+        button {
+            padding: 10px 20px; /* Increase padding for larger buttons */
+            font-size: 16px; /* Increase font size */
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white; /* Ensure the text color is white */
+            flex: 1; /* Make buttons take equal space */
+            max-width: 45%; /* Prevent buttons from becoming too wide */
+				transition: background-color 0.3s;
+        }
+
+        /* Start button styles */
+.btn-play {
+    background-color: #008CBA;
+}
+
+.btn-play:active {
+    background-color: #005f6b; /* Darker shade when pressed */
+}
+
+/* Stop button styles */
+.btn-stop {
+    background-color: #f44336;
+}
+
+.btn-stop:active {
+    background-color: #ba2c2c; /* Darker shade when pressed */
+}
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .results div {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #444444;
+            border-radius: 4px;
+        }
+
+        .output-section {
+            margin-top: 20px;
+        }
+
+        .output-section h4 {
+            margin: 0;
+            padding: 10px;
+            background-color: #333333;
+            border-radius: 4px;
+        }
+
+        .output-section div {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #444444;
+            border-radius: 4px;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .badge-primary {
+            background-color: #007bff;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .float-right {
+            float: right;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        #lista_reprovadas {
+            display: none;
+        }
+
+        .btn-show {
+            background-color: #28a745; /* Green color for the show button */
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 4px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: -0.1px; /* Move up by 2px */
+        }
+
+        h1 {
+            font-weight: bold; /* Make text bold */
+        }
+
+        
+
+        .popup {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: auto;
+            height: auto;
+            z-index: 1000;
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .popup img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .popup p {
+            margin: 0;
+        }
+		.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: -40px;
+	margin-top: -40px
+}
+
+.logo {
+    width: 170px;  /* Adjust the size as needed */
+    height: auto;  /* Maintain aspect ratio */
+}
+
+h2 {
+    margin-top: 0;  /* Remove any top margin */
+    padding-top: -5px;  /* Adjust as needed to fine-tune spacing */
+    font-weight: bold;
+    z-index: 1;  /* Ensure the text is on top */
+    position: relative;  /* Allow overlapping */
+text-align: center;
+font-size:35;
+font-family: Impact, Charcoal, sans-serif;
+}
+    </style>
+</head>
+<body>
+    <div id="animation-container">
+        <h1 id="animation-text">KABIR</h1>
+    </div>
+    <div class="container">
+<div class="logo-container">
+    <img src="eagle.png" alt="Eagle Logo" class="logo">
+</div>
+        <h2>THE WARDEN</h2>
+        <textarea id="cc-details" placeholder="PUT YOUR CARDS HERE"></textarea>
+        <div>
+            <select id="gate">
+                <option value="api.php">NONSK1[STRIPE]✅</option>
+                <option value="api1.php">NONSK2[TEST]❌</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button class="btn-play" id="start" onclick="startCheck()"><i class="fa fa-play"></i> START</button>
+            <button class="btn-stop" id="stop" onclick="stopCheck()" disabled><i class="fa fa-stop"></i> STOP</button>
+        </div>
+        <div class="results">
+            <h5>TOTAL : <span class="badge badge-primary float-right" id="total">0</span></h5><hr>
+            <h5>HIT : <span class="badge badge-success float-right" id="hit">0</span></h5><hr>
+            <h5>CVV : <span class="badge badge-success float-right" id="cvv">0</span></h5><hr>
+            <h5>CCN : <span class="badge badge-success float-right" id="ccn">0</span></h5><hr>
+            <h5>DEAD : <span class="badge badge-danger float-right" id="dead">0</span>
+                <button class="btn-show float-right" onclick="toggleDead()">Show</button>
+            </h5><hr>
+        </div>
+        <div class="output-section" id="output-hit">
+            <h4 class="card-title mb-1"><i class="fa fa-check-circle text-success"></i> HIT</h4>
+            <div id='lista_charge'></div>
+        </div>
+        <div class="output-section" id="output-cvv">
+            <h4 class="card-title mb-1"><i class="fa fa-check text-success"></i> CVV</h4>
+            <div id='lista_cvvs'></div>
+        </div>
+        <div class="output-section" id="output-ccn">
+            <h4 class="card-title mb-1"><i class="fa fa-times text-success"></i> CCN</h4>
+            <div id='lista_aprovadas'></div>
+        </div>
+        <div class="output-section" id="output-dead">
+            <h4 class="card-title mb-1"><i class="fa fa-times text-danger"></i> DECLINED</h4>
+            <div id='lista_reprovadas'></div>
+        </div>
+    </div>
+
+  
+
+   <script>
+    let stop = false;
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function startCheck() {
+        stop = false;
+        const ccDetails = document.getElementById('cc-details').value.split('\n').filter(cc => cc.trim());
+        const gate = document.getElementById('gate').value;
+        document.getElementById('total').innerText = ccDetails.length;
+
+        document.getElementById('start').disabled = true;
+        document.getElementById('stop').disabled = false;
+
+        showPopup('Started Checking', 'info');
+
+        for (let i = 0; i < ccDetails.length; i++) {
+            if (stop) break;
+
+            const cc = ccDetails[i];
+            const formData = new FormData();
+            formData.append('cc', cc);
+
+            try {
+                const response = await fetch(gate, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                updateResults(data, cc);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+            await sleep(1000); // 1-second delay between each check
+        }
+
+        showPopup('Finished Checking', 'success');
+
+        document.getElementById('start').disabled = false;
+        document.getElementById('stop').disabled = true;
+    }
+
+    function stopCheck() {
+        stop = true;
+    }
+
+    function updateResults(data, cc) {
+        const hitOutput = document.getElementById('lista_charge');
+        const cvvOutput = document.getElementById('lista_cvvs');
+        const ccnOutput = document.getElementById('lista_aprovadas');
+        const deadOutput = document.getElementById('lista_reprovadas');
+        const div = document.createElement('div');
+        div.innerText = `${cc} - ${data.message}`;
+
+        if (data.status === 'hit') {
+            document.getElementById('hit').innerText = parseInt(document.getElementById('hit').innerText) + 1;
+            hitOutput.appendChild(div);
+        }
+        if (data.status === 'cvv') {
+            document.getElementById('cvv').innerText = parseInt(document.getElementById('cvv').innerText) + 1;
+            cvvOutput.appendChild(div);
+
+            showPopup('CVV +1', 'success');
+        }
+        if (data.status === 'ccn') {
+            document.getElementById('ccn').innerText = parseInt(document.getElementById('ccn').innerText) + 1;
+            ccnOutput.appendChild(div);
+
+            showPopup('CCN +1', 'success');
+        }
+        if (data.status === 'dead') {
+            document.getElementById('dead').innerText = parseInt(document.getElementById('dead').innerText) + 1;
+            deadOutput.appendChild(div);
+        }
+    }
+
+    function toggleDead() {
+        const deadOutput = document.getElementById('lista_reprovadas');
+        const button = document.querySelector('.btn-show');
+        if (deadOutput.style.display === 'none') {
+            deadOutput.style.display = 'block';
+            button.innerText = 'Hide';
+        } else {
+            deadOutput.style.display = 'none';
+            button.innerText = 'Show';
+        }
+    }
+
+    function showPopup(message, icon) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="${icon}" /><p>${message}</p>`;
+        document.body.appendChild(popup);
+
+        // Hide the popup after 3 seconds
+        setTimeout(() => {
+            popup.remove();
+        }, 3000);
+    }
+
+    // Hide the animation text after 2 seconds
+    window.onload = function() {
+        setTimeout(() => {
+            document.getElementById('animation-container').style.display = 'none';
+        }, 2000);
+    };
+</script>
+</body>
+</html>
